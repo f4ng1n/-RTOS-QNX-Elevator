@@ -1,3 +1,17 @@
+/* Задание 2 Вызов лифта
+  Требуется реализовать модель работы автомата, управляющего лифтом при его вызове с некоторого этажа.
+Рассматривается лестничная площадка некоторого этажа дома.
+Около двери лифта расположена панель с двумя кнопками вызова «Вверх» (Up) и «Вниз» (Down).
+Предполагается, что лифт может находиться в одном из трех статических состояний
+             (state) - наверху (TOP),
+              на данном этаже (THIS_FLOOR)
+              внизу (BOTTOM).
+
+    Фан Тхи Хай Ха 6362
+	Версия 1.0 21.04.2021
+ */
+
+
 #include <pthread.h>
 #include <signal.h>
 #include <unistd.h>
@@ -17,7 +31,7 @@ void move (int direction) {
     switch (direction) {
         case Up:
             for (i = 1; i <= 3; i++) {
-                printf ("*** Go UP\n");
+                printf ("--> Going UP !\n");
                 usleep(500000);
                 state = TOP;
             }
@@ -25,7 +39,7 @@ void move (int direction) {
         break;
         case Down:
             for (i = 1; i <= 3; i++ ) {
-                printf ("*** Go DOWN\n");
+                printf ("--> Going DOWN !\n");
                 usleep(500000);
                 state = BOTTOM;
             }
@@ -34,13 +48,13 @@ void move (int direction) {
 
     switch (state) {
         case TOP:
-            printf("state TOP\n");
+            printf("> State TOP\n");
         break;
         case BOTTOM:
-            printf("state BOTTOM\n");
+            printf("> State BOTTOM\n");
         break;
         case THIS_FLOOR:
-            printf("state THIS_FLOOR\n");
+            printf("> State THIS_FLOOR\n");
         break;
     }
 }
@@ -66,7 +80,6 @@ void* push_button(void* args) {
 }
 
 //Работа автомата и перемещение лифта моделируются в функции обработки сигналов
-
 void lift_control(int signo){
 	switch(state) {
 	    case THIS_FLOOR:
@@ -115,7 +128,8 @@ void lift_control(int signo){
 int main(int argc, char *argv[])
 {
     pthread_t t;
-    printf("Start\n");
+    printf("LAB 2: ELEVATOR\n");
+    printf("**Start**\n");
 
     sigset_t set;
     sigemptyset(&set);
@@ -130,6 +144,9 @@ int main(int argc, char *argv[])
     pthread_create(&t,NULL,&push_button, NULL);
     pthread_join(t, NULL);
 
-    printf("Finish\n");
+    printf("**Finish**\n");
     return 0;
 }
+
+
+
